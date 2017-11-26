@@ -27,20 +27,20 @@ tf.flags.DEFINE_float('pool_size', 50,
 tf.flags.DEFINE_integer('ngf', 64,
                         'number of gen filters in first conv layer, default: 64')
 
-tf.flags.DEFINE_string('X', 'data/tfrecords/apple.tfrecords',
-                       'X tfrecords file for training, default: data/tfrecords/apple.tfrecords')
-tf.flags.DEFINE_string('Y', 'data/tfrecords/orange.tfrecords',
-                       'Y tfrecords file for training, default: data/tfrecords/orange.tfrecords')
+tf.flags.DEFINE_string('X', '/my_data/data/tfrecords/apple.tfrecords',
+                       'X tfrecords file for training, default: /my_data/data/tfrecords/apple.tfrecords')
+tf.flags.DEFINE_string('Y', '/my_data/data/tfrecords/orange.tfrecords',
+                       'Y tfrecords file for training, default: /my_data/data/tfrecords/orange.tfrecords')
 tf.flags.DEFINE_string('load_model', None,
                         'folder of saved model that you wish to continue training (e.g. 20170602-1936), default: None')
 
 
 def train():
   if FLAGS.load_model is not None:
-    checkpoints_dir = "checkpoints/" + FLAGS.load_model.lstrip("checkpoints/")
+    checkpoints_dir = "output/" + FLAGS.load_model.lstrip("checkpoints/")
   else:
     current_time = datetime.now().strftime("%Y%m%d-%H%M")
-    checkpoints_dir = "checkpoints/{}".format(current_time)
+    checkpoints_dir = "output/{}".format(current_time)
     try:
       os.makedirs(checkpoints_dir)
     except os.error:
@@ -109,10 +109,10 @@ def train():
           logging.info('  F_loss   : {}'.format(F_loss_val))
           logging.info('  D_X_loss : {}'.format(D_X_loss_val))
 
-        if step % 10000 == 0:
-          save_path = saver.save(sess, checkpoints_dir + "/model.ckpt", global_step=step)
+        if step % 500 == 0:
+          save_path = saver.save(sess, '/output/model.ckpt', global_step=step)
           logging.info("Model saved in file: %s" % save_path)
-
+          #raise 'Not enough time left error'
         step += 1
 
     except KeyboardInterrupt:
@@ -121,7 +121,7 @@ def train():
     except Exception as e:
       coord.request_stop(e)
     finally:
-      save_path = saver.save(sess, checkpoints_dir + "/model.ckpt", global_step=step)
+      save_path = saver.save(sess, '/output/model.ckpt', global_step=step)
       logging.info("Model saved in file: %s" % save_path)
       # When done, ask the threads to stop.
       coord.request_stop()

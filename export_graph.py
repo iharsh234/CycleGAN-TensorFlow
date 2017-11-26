@@ -43,12 +43,12 @@ def export_graph(model_name, XtoY=True):
 
   with tf.Session(graph=graph) as sess:
     sess.run(tf.global_variables_initializer())
-    latest_ckpt = tf.train.latest_checkpoint(FLAGS.checkpoint_dir)
+    latest_ckpt = r'/model/model.ckpt-500'
     restore_saver.restore(sess, latest_ckpt)
     output_graph_def = tf.graph_util.convert_variables_to_constants(
         sess, graph.as_graph_def(), [output_image.op.name])
 
-    tf.train.write_graph(output_graph_def, 'pretrained', model_name, as_text=False)
+    tf.train.write_graph(output_graph_def, '/output', model_name, as_text=False)
 
 def main(unused_argv):
   print('Export XtoY model...')

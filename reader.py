@@ -55,8 +55,8 @@ class Reader():
     return image
 
 def test_reader():
-  TRAIN_FILE_1 = 'data/tfrecords/apple.tfrecords'
-  TRAIN_FILE_2 = 'data/tfrecords/orange.tfrecords'
+  TRAIN_FILE_1 = 'my_data/data/tfrecords/apple.tfrecords'
+  TRAIN_FILE_2 = 'my_data/data/tfrecords/orange.tfrecords'
 
   with tf.Graph().as_default():
     reader1 = Reader(TRAIN_FILE_1, batch_size=2)
